@@ -120,47 +120,55 @@ begin
         end;
         DevPID := StrToInt('$' + s);
 
-        j := pos('MI_', Name) + 3; // ищем MI
-        s := '';
-        while (Name[j] <> '&') and (Name[j] <> #0) do // получаем MI
+        j := pos('MI_', Name);
+        if j <> 0 then
         begin
-          s := s + Name[j];
-          Inc(j);
-        end;
-        DevMI := StrToInt('$' + s);
-
-
-        if (DevVID = VID) and (DevPID = PID) and (DevMI = MI) then // если VID и PID и MI - наши, то
-        begin
-          SetLength(DevicePath, 10);
-          // 10 символов на название ком-порта - хватит (максимальный COM999999 [последний символ = #0])
-          RegKey := SetupDiOpenDevRegKey(PnPHandle, DeviceInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_QUERY_VALUE);
-          // получаем Handle на раздел реестра экземпл€ра устройства
-          if RegKey = INVALID_HANDLE_VALUE then
+          j := j + 3; // ищем MI
+          s := '';
+          while (Name[j] <> '&') and (Name[j] <> #0) do // получаем MI
           begin
-            Inc(i); // если ошибка - следущий порт
+            s := s + Name[j];
+            Inc(j);
+          end;
+          DevMI := StrToInt('$' + s);
+        end
+        else
+        begin
+          DevMI := 0;
+        end;
+      end;
+
+      if (DevVID = VID) and (DevPID = PID) and (DevMI = MI) then // если VID и PID и MI - наши, то
+      begin
+        SetLength(DevicePath, 10);
+        // 10 символов на название ком-порта - хватит (максимальный COM999999 [последний символ = #0])
+        RegKey := SetupDiOpenDevRegKey(PnPHandle, DeviceInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_QUERY_VALUE);
+        // получаем Handle на раздел реестра экземпл€ра устройства
+        if RegKey = INVALID_HANDLE_VALUE then
+        begin
+          Inc(i); // если ошибка - следущий порт
+          Continue;
+        end;
+        try
+          RequiredLength := 10 * SizeOf(Char);
+          if RegQueryValueEx(RegKey, 'PortName', nil, @RegType, @DevicePath[1], @RequiredLength) <> ERROR_SUCCESS then
+          // в PortName записано название порта (например - —ќћ5)
+          begin
+            Inc(i);
             Continue;
           end;
-          try
-            RequiredLength := 10 * SizeOf(Char);
-            if RegQueryValueEx(RegKey, 'PortName', nil, @RegType, @DevicePath[1], @RequiredLength) <> ERROR_SUCCESS then
-            // в PortName записано название порта (например - —ќћ5)
-            begin
-              Inc(i);
-              Continue;
-            end;
-            DevicePath := Copy(DevicePath, 1, RequiredLength div SizeOf(Char) - 1);
-            // в RequiredLength - размер полученной строки, минус 1 - последний ноль нам не нужен
-            Ports.Add(DevicePath); // добавле€ем им€ порта
-            Inc(Result);
-            // результат функции - количество портов дл€ данного VID&PID
-          finally
-            RegCloseKey(RegKey); // Handle надо закрыть, даже в случае ошибки
-          end;
+          DevicePath := Copy(DevicePath, 1, RequiredLength div SizeOf(Char) - 1);
+          // в RequiredLength - размер полученной строки, минус 1 - последний ноль нам не нужен
+          Ports.Add(DevicePath); // добавле€ем им€ порта
+          Inc(Result);
+          // результат функции - количество портов дл€ данного VID&PID
+        finally
+          RegCloseKey(RegKey); // Handle надо закрыть, даже в случае ошибки
         end;
       end;
       Inc(i); // следущий порт
     end;
+
   finally
     SetupDiDestroyDeviceInfoList(PnPHandle); // освобождаем зан€тую пам€ть.
   end;

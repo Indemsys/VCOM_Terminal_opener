@@ -36,48 +36,45 @@ object frmMain: TfrmMain
     object Label1: TLabel
       Left = 512
       Top = 10
-      Width = 38
-      Height = 23
+      Width = 33
+      Height = 19
       Anchors = [akRight, akBottom]
       Caption = 'VID:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 59
     end
     object Label2: TLabel
       Left = 512
       Top = 46
-      Width = 37
-      Height = 23
+      Width = 32
+      Height = 19
       Anchors = [akRight, akBottom]
       Caption = 'PID:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 95
     end
     object Label3: TLabel
-      Left = 395
+      Left = 422
       Top = 82
-      Width = 155
-      Height = 23
+      Width = 128
+      Height = 19
       Alignment = taRightJustify
       Anchors = [akRight, akBottom]
       Caption = 'Interface number:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 131
     end
     object Label4: TLabel
       Left = 12
@@ -110,20 +107,19 @@ object frmMain: TfrmMain
       ExplicitTop = 218
     end
     object Label6: TLabel
-      Left = 411
+      Left = 426
       Top = 155
-      Width = 83
-      Height = 23
+      Width = 68
+      Height = 19
       Alignment = taRightJustify
       Anchors = [akRight, akBottom]
       Caption = 'Baudrate:'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
-      Font.Height = -19
+      Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      ExplicitTop = 204
     end
     object btListAllPorts: TButton
       Left = 12
@@ -235,10 +231,11 @@ object frmMain: TfrmMain
       Text = '115200'
     end
     object cbAutoOpen: TRxCheckBox
-      Left = 468
-      Top = 236
+      Left = 157
+      Top = 251
       Width = 161
       Height = 17
+      Anchors = [akLeft, akBottom]
       Caption = 'Automatically open terminal'
       TabOrder = 8
       WordWrap = True
@@ -247,11 +244,12 @@ object frmMain: TfrmMain
       Style = vsNormal
     end
     object cbOpenAll: TRxCheckBox
-      Left = 297
-      Top = 236
-      Width = 160
+      Left = 157
+      Top = 228
+      Width = 140
       Height = 17
-      Caption = 'Open all available ports:'
+      Anchors = [akLeft, akBottom]
+      Caption = 'Open all available ports'
       TabOrder = 9
       WordWrap = True
       HorizontalAlignment = taLeftJustify
